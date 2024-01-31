@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider"
 import { cn } from "@/lib/utils"
 import { ClerkProvider } from '@clerk/nextjs'
 import { ProfileContextProvider } from '@/components/providers/profile-provider'
+import { QueryProvider } from '@/components/providers/query-provider'
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -34,9 +35,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ProfileContextProvider>
-              {children}
-            </ProfileContextProvider>
+            <QueryProvider>
+              <ProfileContextProvider>
+                {children}
+              </ProfileContextProvider>
+            </QueryProvider>
           </ThemeProvider>
         </body>
       </html>

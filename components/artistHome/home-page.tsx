@@ -11,7 +11,6 @@ import { LoggedUserTypes, useProfileContext } from "../providers/profile-provide
 export default function HomePage({ profile }: { profile?: LoggedUserTypes }) {
 
 
-
   const [showSidebar, setShowSidebar] = useState(false)
 
   const toggleSidebarVisibility = () => {

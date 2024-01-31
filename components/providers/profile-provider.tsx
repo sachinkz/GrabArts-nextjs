@@ -3,7 +3,7 @@
 import React, { createContext, useContext, Dispatch, SetStateAction, useState } from "react"
 
 export type LoggedUserTypes = {
-  id: string
+  _id: string
   userId: string
   name: string
   email: string
@@ -24,7 +24,7 @@ interface ContextProps {
 
 const ProfileContext = createContext<ContextProps>({
   profile: {
-    id: "",
+    _id: "",
     userId: "",
     name:"",
     email: "",
@@ -43,7 +43,7 @@ const ProfileContext = createContext<ContextProps>({
 export const ProfileContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [profile, setProfile] = useState<LoggedUserTypes>({
-    id: "",
+    _id: "",
     userId: "",
     name:"",
     email: "",
