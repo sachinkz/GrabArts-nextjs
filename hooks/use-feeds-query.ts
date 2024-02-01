@@ -3,9 +3,8 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import axios from 'axios';
 
 
-// let param: any = undefined;
 
-export const useFeedQuery = (userId:string) => {
+export const useFeedQuery = () => {
 
     
     const fetchFeeds = async ({pageParam=undefined}) => {
@@ -14,7 +13,6 @@ export const useFeedQuery = (userId:string) => {
             url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/feeds`,
             query: {
                 cursor:pageParam,
-                userId: userId,
             }
         }, { skipNull: true })
 
@@ -30,7 +28,7 @@ export const useFeedQuery = (userId:string) => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryKey: ['feeds',userId],
+        queryKey: ['feeds'],
         queryFn:fetchFeeds,
         getNextPageParam: (lastPage) =>lastPage?.nextCursor,
         initialPageParam:undefined,

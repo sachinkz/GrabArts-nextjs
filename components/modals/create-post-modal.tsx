@@ -16,7 +16,7 @@ import {
 import { FileUplaod } from "../file-upload"
 import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
-import { PlusCircle } from "lucide-react"
+import { ImageDownIcon, PlayCircle, PlusCircle } from "lucide-react"
 import { Textarea } from "../ui/textarea"
 import axios from "axios"
 import { useProfileContext } from "../providers/profile-provider"
@@ -30,13 +30,19 @@ const formSchema = z.object({
     caption: z.string().max(200, { message: "maximum 200 characters allowed" }),
 })
 
-export default function CreatePostModal({isOpen,closeModal}:{isOpen: boolean,closeModal:Dispatch<SetStateAction<boolean>>}) {
+interface CreatePostModalProps {
+    isOpen: boolean,
+    closeModal: Dispatch<SetStateAction<boolean>>,
+    location: "onSidebar" | "onTopImage" | "onTopVideo"
+}
 
-    const router=useRouter()
+export default function CreatePostModal({ isOpen, closeModal, location }: CreatePostModalProps) {
+
+    const router = useRouter()
 
     const { profile } = useProfileContext()
-    
-    if(!profile){
+
+    if (!profile) {
         redirectToSignIn()
     }
 
@@ -55,29 +61,41 @@ export default function CreatePostModal({isOpen,closeModal}:{isOpen: boolean,clo
         const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/post`, {
             ...values,
             userId: profile.userId,
-            name:profile.name
+            name: profile.name
         })
         console.log(res.data)
-        if(res.data.createdPost){
-            router.push('/artist')
-            closeModal(false)
+        if (res.data.createdPost) {
+            window.location.reload()
         }
     }
 
 
-    const handleClose=()=>{
+    const handleClose = () => {
         form.reset()
     }
 
 
 
     return (
-        <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogTrigger>
-                <div className='flex hover:bg-secondary/25 cursor-pointer pl-5 py-2 items-center gap-2'>
-                    <PlusCircle className='w-4 h-4 max-lg:h-6 max-lg:w-5' />
-                    <p className='text-primary/75 hover:text-primary max-lg:hidden'>Create Post</p>
-                </div>
+        <Dialog  onOpenChange={handleClose}>
+            <DialogTrigger className="w-full flex gap-1">
+                {location === "onSidebar" &&
+                    <div className='flex w-full hover:bg-secondary/25 cursor-pointer pl-5 py-2 items-center gap-2'>
+                        <PlusCircle className='w-4 h-4 max-lg:h-6 max-lg:w-5' />
+                        <p className='text-primary/75 hover:text-primary max-lg:hidden'>Create Post</p>
+                    </div>
+                }
+                {location === "onTopImage" &&
+                    <div className="w-full mr-1 flex justify-center bg-secondary/50 hover:bg-secondary cursor-pointer py-2">
+                        <ImageDownIcon />
+                    </div>
+                }
+                {
+                    location === "onTopVideo" &&
+                    <div className="w-full flex justify-center bg-secondary/50 hover:bg-secondary cursor-pointer py-2">
+                        <PlayCircle />
+                    </div>
+                }
             </DialogTrigger>
             <DialogContent className="max-sm:p-5">
                 <DialogHeader>

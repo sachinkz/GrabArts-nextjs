@@ -8,18 +8,18 @@ import { Heart, Share2 } from "lucide-react"
 import Image from "next/image"
 import CommentSection from "../artistHome/comment-section"
 import { ScrollArea } from "../ui/scroll-area"
-import ReactPlayer from "react-player";
 
 
 interface PostDisplayModalProps {
     postUrl: string
     isVideo: boolean
+    postId:string
 }
 
 
 
 
-export function PostDisplayModal({ postUrl, isVideo }: PostDisplayModalProps) {
+export function PostDisplayModal({ postUrl, isVideo ,postId}: PostDisplayModalProps) {
 
     const videoUrl = '/video.mp4'
 
@@ -37,7 +37,7 @@ export function PostDisplayModal({ postUrl, isVideo }: PostDisplayModalProps) {
                         <Heart className="text-red-500 " />
                         <Share2 />
                     </div>
-                    <CommentSection />
+                    <CommentSection postId={postId} />
                 </ScrollArea>
 
             </DialogContent>

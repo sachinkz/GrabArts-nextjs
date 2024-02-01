@@ -5,6 +5,7 @@ import React from 'react'
 const page =async () => {
 
   const loggedUser=await initialProfile()
+  
   return (
     <HomePage profile={loggedUser} />
   )

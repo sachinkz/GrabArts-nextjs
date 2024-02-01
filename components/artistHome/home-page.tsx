@@ -18,9 +18,10 @@ export default function HomePage({ profile }: { profile?: LoggedUserTypes }) {
   }
   const { setProfile } = useProfileContext()
   useEffect(() => {
-    // @ts-ignore
-    setProfile(profile)
-  }, [])
+    if (profile) {
+      setProfile(profile)
+    }
+  }, [profile])
 
   return (
     <div className="min-h-screen max-h-screen px-24 max-xl:px-0">

@@ -6,7 +6,6 @@ import axios from "axios";
 export const initialProfile=async()=>{
 
       const user = await currentUser()
-
     if(!user){
         return redirectToSignIn();
     }

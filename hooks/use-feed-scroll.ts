@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
 
 type ChatScrollProps = {
-    topRef: React.RefObject<HTMLDivElement>
-    bottomRef: React.RefObject<HTMLDivElement>
+    feedsDiv: React.RefObject<HTMLDivElement>
     shouldLoadMore: boolean;
     loadMore: () => void;
 }
 
 export const useFeedScroll = ({
-    topRef, shouldLoadMore, loadMore
+    feedsDiv, shouldLoadMore, loadMore
 }: ChatScrollProps) => {
 
 
      useEffect(() => {
-        const feedDiv = topRef?.current;
+        const feedDiv = feedsDiv?.current;
         console.log(feedDiv)
         const handleScroll = () => {
             const scrollHeight = feedDiv?.scrollHeight;
@@ -21,14 +20,14 @@ export const useFeedScroll = ({
             const clientHeight = feedDiv?.clientHeight;
             console.log({scrollHeight,scrollTop,clientHeight})
             //@ts-ignore
-            if (scrollHeight - scrollTop === clientHeight && shouldLoadMore) {
-                loadMore();
-            }
+            if (scrollTop + clientHeight === scrollHeight) {
+                loadMore()
+              }
         };
 
         feedDiv?.addEventListener("scroll", handleScroll);
-
         return () => feedDiv?.removeEventListener("scroll", handleScroll);
-    }, [shouldLoadMore, loadMore, topRef]);
+
+    }, [shouldLoadMore, loadMore, feedsDiv]);
 
 }

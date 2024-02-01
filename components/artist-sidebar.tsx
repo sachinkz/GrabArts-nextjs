@@ -43,7 +43,7 @@ const ArtistSidebar = ({ showSidebar, toggleSidebarVisibility, userId }:SidebarP
                         <a href="https://biscord.up.railway.app/"><p className='text-primary/75 hover:text-primary max-lg:hidden'>Messages</p></a>
                     </div>
                     <div onClick={() => setIsModalOpen(true)} >
-                        <CreatePostModal isOpen={isModalOpen} closeModal={setIsModalOpen} />
+                        <CreatePostModal location='onSidebar' isOpen={isModalOpen} closeModal={setIsModalOpen} />
                     </div>
 
                     <div className='flex hover:bg-secondary/25 cursor-pointer pl-5 py-2 items-center gap-2'>

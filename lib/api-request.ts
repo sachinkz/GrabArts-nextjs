@@ -1,0 +1,5 @@
+
+
+// const commentPost=async(data)=>{
+
+// }

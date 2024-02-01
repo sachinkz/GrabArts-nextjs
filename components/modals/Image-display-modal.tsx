@@ -1,18 +1,11 @@
-
-import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+
 import { HeartFilledIcon } from "@radix-ui/react-icons"
-import { Heart } from "lucide-react"
 import Image from "next/image"
 
 export function ImageDisplayModal({ imgUrl }: { imgUrl: string }) {
