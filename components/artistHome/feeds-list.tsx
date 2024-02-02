@@ -13,6 +13,8 @@ import { useProfileContext } from "../providers/profile-provider"
 import { redirectToSignIn } from "@clerk/nextjs"
 import { useFeedQuery } from "@/hooks/use-feeds-query"
 import { useFeedScroll } from "@/hooks/use-feed-scroll"
+import axios from "axios"
+import { useToast } from "../ui/use-toast"
 
 interface MailListProps {
   items: Feed[];
@@ -43,6 +45,7 @@ export function FeedsList({ toggleSidebarVisibility, showSidebar }: MailListProp
 
   const [feeds, setFeeds] = useState<FeedProps[]>([])
   const feedsDiv = useRef<ElementRef<"div">>(null)
+  const { toast } = useToast()
 
 
   const handleCommentOpen = (id: string) => {
@@ -70,9 +73,36 @@ export function FeedsList({ toggleSidebarVisibility, showSidebar }: MailListProp
     }
   }, [data])
 
+  const { profile } = useProfileContext()
 
+  const likePost = async (postId: string) => {
+    if (profile) {
+      const body = {
+        userId: profile._id,
+        postId
+      }
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/likepost`, body)
+      if (res.data.status) {
+        const newArr = feeds.map((feed) => {
+          if (feed._id === res.data.post._id) {
+            return res.data.post
+          } else {
+            return feed
+          }
+        })
+        setFeeds(newArr)
+      }
+    }
+  }
 
+  console.log(feeds)
 
+  const handleShare = (postUrl:string) => {
+    navigator.clipboard.writeText(postUrl);
+    toast({
+      description: "Share link is copied to clipboard",
+    })
+  }
 
   return (
 
@@ -82,7 +112,7 @@ export function FeedsList({ toggleSidebarVisibility, showSidebar }: MailListProp
 
       <div className="flex flex-col gap-10 p-4 ">
 
-        {feeds?.map((item: any,i) => (
+        {feeds?.map((item: any, i) => (
           <div className="bg-secondary/25 p-2 border border-secondary rounded-md" key={i}>
             <div className="flex w-full flex-col gap-1">
               <div className="flex items-center">
@@ -100,13 +130,24 @@ export function FeedsList({ toggleSidebarVisibility, showSidebar }: MailListProp
             </div>
 
             <div className="w-full flex justify-center">
-              <PostDisplayModal postId={item._id} isVideo={item.isVideo} postUrl={item.postUrl} />
+              <PostDisplayModal
+                postId={item._id}
+                likes={item.likes}
+                commentsLength={item.comments.length}
+                isVideo={item.isVideo}
+                likePost={likePost}
+                profileId={profile._id}
+                postUrl={item.postUrl} />
               {item.isVideo && <VideoPlayer videoUrl={item.postUrl} />}
             </div>
-            <div className="flex gap-3 my-3 ml-2">
-              <Heart className="text-red-500 " />
-              <MessageCircleDashedIcon className="cursor-pointer" onClick={() => handleCommentOpen(item._id)} />
-              <Share2 />
+            <div className="flex gap-6 my-3 ml-2">
+              <Heart onClick={() => likePost(item._id)} className={`${item.likes?.includes(profile._id) ? "text-red-500" : " text-white"} cursor-pointer hover:scale-110 transition-transform duration-300`} />
+              <MessageCircleDashedIcon className="cursor-pointer hover:scale-110 transition-transform duration-300" onClick={() => handleCommentOpen(item._id)} />
+              <Share2 onClick={()=>handleShare(item.postUrl)} className="cursor-pointer hover:scale-110 transition-transform duration-300" />
+            </div>
+            <div className="flex gap-3 my-3 rounded-md bg-secondary px-2 py-2">
+              <p className="text-xs"><span className="font-extrabold">{item.likes.length}</span> likes</p>
+              <p className="text-xs"><span className="font-extrabold">{item.comments.length}</span> comments</p>
             </div>
             {item.openComments && <CommentSection postId={item._id} />}
           </div>

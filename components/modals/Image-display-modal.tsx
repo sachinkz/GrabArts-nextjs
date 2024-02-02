@@ -11,8 +11,8 @@ import Image from "next/image"
 export function ImageDisplayModal({ imgUrl }: { imgUrl: string }) {
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <Image alt="postimage" src={imgUrl} width={200} height={200} className="w-[250px] h-[250px] hover:scale-105 transition-transform ease-in-out duration-500 cursor-pointer aspect-square max-sm:w-[120px] max-sm:h-[120px] object-cover rounded-lg" />
+            <DialogTrigger className="bg-secondary" asChild>
+                <Image alt="postimage" src={imgUrl} width={200} height={200} className="w-[160px] bg-secondary h-[160px] hover:scale-105 transition-transform ease-in-out duration-500 cursor-pointer aspect-square max-sm:w-[80px] max-sm:h-[80px] object-cover rounded-lg" />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] w-[500px]">
                 <Image src={imgUrl} width={400} height={400} alt="post-image" className="object-contain w-[700px] mt-10" />

@@ -29,7 +29,7 @@ export default function HomePage({ profile }: { profile?: LoggedUserTypes }) {
         <ArtistSidebar
           toggleSidebarVisibility={toggleSidebarVisibility}
           showSidebar={showSidebar}
-          userId={profile?.userId}
+          userId={profile?._id}
         />
         <Separator orientation="vertical" />
         <FeedsList

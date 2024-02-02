@@ -127,6 +127,7 @@ export default function OrderForm() {
                         </FormItem>
                     )}
                 />
+                <input type="file" capture="user" accept="image/*" />
                 <Button className="w-fit self-center" type="submit">Submit</Button>
             </form>
         </Form>

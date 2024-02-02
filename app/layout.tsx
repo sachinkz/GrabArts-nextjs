@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter as FontSans } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { Toaster } from "@/components/ui/toaster"
 
 import { cn } from "@/lib/utils"
 import { ClerkProvider } from '@clerk/nextjs'
@@ -38,6 +39,7 @@ export default function RootLayout({
             <QueryProvider>
               <ProfileContextProvider>
                 {children}
+                <Toaster />
               </ProfileContextProvider>
             </QueryProvider>
           </ThemeProvider>

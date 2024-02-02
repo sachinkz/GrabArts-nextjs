@@ -1,51 +1,77 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ImageDisplayModal } from "../modals/Image-display-modal";
+import { GhostIcon, SatelliteDish } from "lucide-react";
 
 
-const posts = [
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-    "https://www.pencilperceptions.com/wp-content/uploads/2022/08/20220827_083319-scaled.jpg",
-]
-
-const works = [
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-    "https://i.ytimg.com/vi/xov0aoB3Wbg/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDZ46F9ET4rXUDDxLFnNDfxvZfwWg",
-]
 
 
-const PostsAndWorks = () => {
+
+export type ProfileSectionProps = {
+    artistData?: {
+        _id: string,
+        userId: string,
+        name: string,
+        email: string,
+        imageUrl: string | undefined,
+        reviews: {}[],
+        isVerified: boolean,
+        isTopten: boolean,
+        posts: {
+            _id: string,
+            caption: string,
+            postUrl: string,
+            isVideo: false,
+            userId: string,
+            comments: [],
+            likes: string[],
+            createdAt: string
+        }[]
+        followers: string[],
+        following: string[],
+        createdAt: string,
+        updatedAt: string,
+        works: {
+            _id: string,
+            caption: string,
+            postUrl: string,
+            isVideo: false,
+            userId: string,
+            comments: [],
+            likes: string[],
+            createdAt: string
+        }[]
+    }
+}
+
+
+const PostsAndWorks = ({ artistData }: ProfileSectionProps) => {
 
     return (
-        <Tabs defaultValue="works" className="w-full flex items-center gap-3 flex-col px-10 max-md:px-3">
+        <Tabs defaultValue="posts" className="w-full flex items-center  gap-3 flex-col px-10 max-md:px-3">
             <TabsList className="grid w-[350px] mb-5 grid-cols-2">
-                <TabsTrigger value="works">Works</TabsTrigger>
-                <TabsTrigger value="posts">Posts</TabsTrigger>
+                <TabsTrigger value="posts">posts</TabsTrigger>
+                <TabsTrigger value="works">works</TabsTrigger>
             </TabsList>
+            <TabsContent value="posts">
+                <div className="grid w-full grid-cols-5 gap-5 max-xl:grid-cols-4 max-xs:gap-2 max-lg:grid-cols-3">
+                    {artistData?.posts.map((post, i) => (
+                        <ImageDisplayModal key={i} imgUrl={post.postUrl} />
+                    ))}
+                </div>
+
+            </TabsContent>
             <TabsContent value="works">
                 <div className="grid w-full grid-cols-4 gap-5 max-xl:grid-cols-4 max-xs:gap-2 max-lg:grid-cols-3">
-                    {works.map((url, i) => (
-                        <ImageDisplayModal key={i} imgUrl={url} />
+                    {artistData?.works?.map((work, i) => (
+                        <ImageDisplayModal key={i} imgUrl={work.postUrl} />
                     ))}
                 </div>
-            </TabsContent>
-            <TabsContent value="posts">
-                <div className="grid w-full grid-cols-4 gap-5 max-xl:grid-cols-4 max-xs:gap-2 max-lg:grid-cols-3">
-                    {posts.map((url, i) => (
-                        <ImageDisplayModal key={i} imgUrl={url} />
-                    ))}
-                </div>
+                {artistData?.works?.length === 0 && (
+                    <div className="w-full flex justify-center gap-3  items-center h-40">
+                        <h1 className="text-center text-2xl font-bold text-primary/50">No works yet! </h1>
+                        <GhostIcon className=" text-primary/50"/>
+                    </div>
+                )}
             </TabsContent>
         </Tabs>
     );

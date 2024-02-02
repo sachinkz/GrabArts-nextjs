@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { Separator } from "../ui/separator"
-import { AlertCircle } from "lucide-react"
+import { AlertCircle, DollarSign } from "lucide-react"
 
 
 
@@ -73,7 +73,7 @@ export function PricingModal() {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="secondary">Check Pricing</Button>
+                <Button variant="secondary"><DollarSign className="h-4 w-4 mr-2"/> Check Pricing</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] min-w-[600px] max-sm:min-w-[300px] min-h-[400px]">
                 <DialogHeader>
