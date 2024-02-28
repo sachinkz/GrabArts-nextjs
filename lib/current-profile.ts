@@ -1,13 +1,17 @@
 import { auth } from "@clerk/nextjs";
-import axios from "axios";
 
+import { db } from "@/lib/db";
 
 export const currentProfile=async () => {
     const {userId}=auth();
 
     if(!userId) return null;
 
-    const profile=await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/getuser/${userId}`)
+    const profile=await db.profile.findUnique({
+        where:{
+            userId
+        }
+    });
 
-    return profile.data;
+    return profile;
 }

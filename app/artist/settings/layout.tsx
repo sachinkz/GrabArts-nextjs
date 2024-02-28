@@ -20,11 +20,7 @@ const sidebarNavItems = [
   {
     title: "Notifications",
     href: "/artist/settings/notifications",
-  },
-  {
-    title: "Security",
-    href: "/artist/settings/display",
-  },
+  }
 ]
 
 interface SettingsLayoutProps {
@@ -42,7 +38,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
           </p>
         </div>
         <Separator className="my-6" />
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+        <div className="flex  space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <aside className="-mx-4 lg:w-1/5">
             <SidebarNav items={sidebarNavItems} />
           </aside>

@@ -12,7 +12,7 @@ export function ImageDisplayModal({ imgUrl }: { imgUrl: string }) {
     return (
         <Dialog>
             <DialogTrigger className="bg-secondary" asChild>
-                <Image alt="postimage" src={imgUrl} width={200} height={200} className="w-[160px] bg-secondary h-[160px] hover:scale-105 transition-transform ease-in-out duration-500 cursor-pointer aspect-square max-sm:w-[80px] max-sm:h-[80px] object-cover rounded-lg" />
+                <Image alt="postimage" src={imgUrl} width={200} height={200} className="w-[160px] bg-secondary h-[160px] hover:-translate-y-2  hover:shadow-md border-2 border-black/10 hover:shadow-black/75 transition-all ease-in-out duration-500 cursor-pointer aspect-square max-sm:w-[80px] max-sm:h-[80px] object-cover rounded-md" />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] w-[500px]">
                 <Image src={imgUrl} width={400} height={400} alt="post-image" className="object-contain w-[700px] mt-10" />

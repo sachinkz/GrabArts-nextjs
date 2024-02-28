@@ -3,7 +3,7 @@ import {redirectToSignIn } from "@clerk/nextjs/server";
 import axios from "axios";
 
 
-export const initialProfile=async()=>{
+export const initialArtistProfile=async()=>{
 
       const user = await currentUser()
     if(!user){
@@ -19,6 +19,7 @@ export const initialProfile=async()=>{
 
     const profile = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/getuser/${user.id}`)
 
+    
 
     if(!profile.data.message){
         return profile.data;

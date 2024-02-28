@@ -2,6 +2,12 @@ import { Button } from '@/components/ui/button'
 import Navbar from '@/components/navbar/Navbar'
 import { TopAlert } from '@/components/navbar/TopAlert'
 import Link from 'next/link'
+import Image from 'next/image'
+import hero from '../heroimg.svg'
+import sideImg from '../sideImge.png'
+import colors from '../colors.png'
+import colors2 from '../colors2.png'
+
 
 export default function Home() {
 
@@ -11,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Navbar onLandingpage />
-      <div className='w-full min-h-screen px-5 mt-36'>
+      <div className='w-full max-h-screen px-5 pt-32'>
         <div className='w-full flex flex-col justify-center items-center text-center p-3 gap-10'>
           <TopAlert content='😀 Connect with most talented Artists' />
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -25,8 +31,9 @@ export default function Home() {
             <Link href="/shop"><Button variant='outline' size="default">Purchase Art</Button></Link>
           </div>
         </div>
-        <div>
-
+        <div className='w-full flex justify-center'>
+          <Image src={colors2} alt='heroimg' width={300} height={300}  />
+          {/* <Image src={colors} alt='sideImg' width={600} height={600} className='absolute -z-10 dark:opacity-100 left-0 top-0 w-full h-screen pt-5'/> */}
         </div>
       </div>
     </>

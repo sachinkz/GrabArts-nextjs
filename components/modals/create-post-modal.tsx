@@ -13,7 +13,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import { FileUplaod } from "../file-upload"
+import { FileUplaod } from "../file-uplaod"
 import { useRouter } from "next/navigation"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog"
 import { ImageDownIcon, PlayCircle, PlusCircle } from "lucide-react"
@@ -105,7 +105,7 @@ export default function CreatePostModal({ isOpen, closeModal, location }: Create
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full mt-10 flex px-5 max-md:px-0 items-center flex-col">
                         <FormField disabled={isLoading} control={form.control} name="postUrl" render={({ field }) => (
                             <FormItem className="w-full">
-                                <FormLabel className="">Select the Picture</FormLabel>
+                                <FormLabel className="">Select the Picture or Video</FormLabel>
                                 <FormControl>
                                     <FileUplaod endpoint="postImage" value={field.value} onChange={field.onChange} />
                                 </FormControl>

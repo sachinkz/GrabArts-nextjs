@@ -12,13 +12,14 @@ import { ToastAction } from "@/components/ui/toast";
 
 const ProfilePage = () => {
 
-    const [artistData, setArtistData] = useState()
+    const [artistData, setArtistData] = useState<ProfileSectionProps>()
     const params = useParams()
-
+    console.log(params?.artistId)
     useEffect(() => {
-        const artistId = params.artistId;
+        const artistId = params?.artistId;
         const fetchArtistData = async () => {
             const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/profile/${artistId}`)
+            console.log(res.data)
             if (res.data.status) {
                 setArtistData(res.data.artistDetails)
             } else {
@@ -36,8 +37,8 @@ const ProfilePage = () => {
 
     return (
         <div className="w-full mt-14 min-h-screen flex flex-col items-center">
-            <ProfileSection artistData={artistData}/>
-            <PostsAndWorks artistData={artistData} />
+            <ProfileSection artistData={artistData&& artistData}/>
+            <PostsAndWorks artistData={artistData&& artistData} />
             <Separator className="my-10" />
             <ReviewsSection />
         </div>

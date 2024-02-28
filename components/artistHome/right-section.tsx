@@ -1,47 +1,59 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
+import axios from 'axios'
+import { LoggedUserTypes } from '../providers/profile-provider'
 
-const accounts = [
-    {
-        name: 'sachin',
-        image: "https://github.com/shadcn.png"
-    },
-    {
-        name: 'abi',
-        image: "https://github.com/shadcn.png"
-    },
-    {
-        name: 'gokul',
-        image: "https://github.com/shadcn.png"
-    },
-    {
-        name: 'akarsh',
-        image: "https://github.com/shadcn.png"
-    },
-    {
-        name: 'sanjay',
-        image: "https://github.com/shadcn.png"
-    },
-]
 
-const RightSection = () => {
+const RightSection = ({ userId }: { userId?: string }) => {
+
+
+    const [suggestions, setSuggestions] = useState<LoggedUserTypes[]>([])
+    const [following, setFollowing] = useState<boolean>(false)
+    const [processing,setProcessing] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (userId) {
+            (async () => {
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/suggestions/${userId}`)
+                if (res.data.success) {
+                    setSuggestions(res.data.suggestions)
+                }
+            })()
+        }
+    }, [following])
+
+    const followArtist = async (toFollow: string) => {
+        setProcessing(true)
+        const data = {
+            artistToFollow: toFollow,
+            loggedArtist: userId
+        }
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/follow`, data)
+        if (res.data) {
+            setFollowing(!following)
+            setProcessing(false)
+        }
+    }
 
 
     return (
-        <div className='flex flex-col border border-secondary min-h-screen px-5 gap-2 py-10'>
+        <div className='flex flex-col border border-secondary min-h-screen px-5 gap-2 py-10  dark:bg-secondary/20'>
             <h1 className='text-xl font-semibold mb-2 text-center'>Suggested Artists</h1>
-            {accounts.map(account => (
-                <div key={account.name} className='flex bg-secondary/50 p-2 rounded-md items-center gap-2'>
-                    <Avatar className="w-8 h-8">
-                        <AvatarImage src={account.image} alt="@shadcn" />
-                        <AvatarFallback>Profile</AvatarFallback>
-                    </Avatar>
-                    <p>{account.name}</p>
-                    <Button size="sm" className='ml-auto'>Follow</Button>
+            {suggestions.length !== 0 && suggestions.map((account: any) => (
+                <div key={account._id} className='flex bg-secondary/50 p-2 rounded-md items-center justify-between'>
+                    <Link className='flex items-center gap-2' href={`/artist/profile/${account?._id}`}>
+                        <Avatar className="w-8 h-8">
+                            <AvatarImage src={account.imageUrl} alt="@shadcn" />
+                            <AvatarFallback>Profile</AvatarFallback>
+                        </Avatar>
+                        <p>{account.name}</p>
+                    </Link>
+                    <Button disabled={processing} onClick={() => followArtist(account._id)} size="sm" className='ml-auto'>Follow</Button>
                 </div>
             ))}
             <div className='flex w-full mt-3 justify-between max-lg:flex-col'>

@@ -1,53 +1,83 @@
 "use client"
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { ShoppingBasket, UserPlus, UserPlus2, UserPlus2Icon, VerifiedIcon } from "lucide-react";
+import { ShoppingBasket, UserMinus2Icon, UserPlus2Icon, VerifiedIcon } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { PricingModal } from "./Pricing-modal";
-import { UserButton } from "@clerk/nextjs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { LoggedUserTypes} from "../providers/profile-provider";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { redirect } from "next/navigation";
+import Link from "next/link";
 
 export type ProfileSectionProps = {
-    artistData?: {
+    _id: string,
+    userId: string,
+    name: string,
+    email: string,
+    imageUrl: string | undefined,
+    reviews: {}[],
+    isVerified: boolean,
+    isTopten: boolean,
+    posts: {
         _id: string,
+        caption: string,
+        postUrl: string,
+        isVideo: false,
         userId: string,
-        name: string,
-        email: string,
-        imageUrl: string | undefined,
-        reviews: {}[],
-        isVerified: boolean,
-        isTopten: boolean,
-        posts: {
-            _id: string,
-            caption: string,
-            postUrl: string,
-            isVideo: false,
-            userId: string,
-            comments: [],
-            likes: string[],
-            createdAt: string
-        }[]
-        followers: string[],
-        following: string[],
-        createdAt: string,
-        updatedAt: string,
-        works: {
-            _id: string,
-            caption: string,
-            postUrl: string,
-            isVideo: false,
-            userId: string,
-            comments: [],
-            likes: string[],
-            createdAt: string
-        }[]
-    }
+        comments: [],
+        likes: string[],
+        createdAt: string
+    }[]
+    followers: string[],
+    following: string[],
+    createdAt: string,
+    updatedAt: string,
+    works?: {
+        _id: string,
+        caption: string,
+        postUrl: string,
+        isVideo: false,
+        userId: string,
+        comments: [],
+        likes: string[],
+        createdAt: string
+    }[]
 }
 
-const ProfileSection = ({ artistData }: ProfileSectionProps) => {
+
+const ProfileSection = ({ artistData }:{artistData?:ProfileSectionProps}) => {
+
+    const [profile, setProfile] = useState<LoggedUserTypes>()
+    const [following, setFollowing] = useState<boolean>(false)
 
 
+    useEffect(() => {
+        let data = localStorage.getItem("profile")
+        if (data) {
+            const pro = JSON.parse(data)
+            if (pro.following.includes(artistData?._id)) {
+                setFollowing(true)
+            }
+            setProfile(pro)
+        } else {
+            return redirect("/")
+        }
+    }, [])
 
+
+    const followArtist = async () => {
+        const data = {
+            artistToFollow: artistData?._id,
+            loggedArtist: profile?._id
+        }
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/artist/follow`, data)
+        console.log(res.data)
+        if (res.data) {
+            setFollowing(res.data.follow)
+        }
+    }
 
     return (
         <div className="w-full  min-h-[300px] relative">
@@ -59,16 +89,16 @@ const ProfileSection = ({ artistData }: ProfileSectionProps) => {
                             <span><VerifiedIcon className="text-4xl text-blue-500" /></span>
                         </Badge>}
                         <h1 className="text-5xl capitalize font-bold max-md:text-4xl max-sm:text-2xl">{artistData?.name}</h1>
-                        <TooltipProvider>
+                        {artistData?._id !== profile?._id && <TooltipProvider>
                             <Tooltip delayDuration={100}>
                                 <TooltipTrigger asChild>
-                                    <Button className="max-md:mt-0 max-sm:h-6 max-sm:ml-2 max-sm:w-6 mt-2 ml-5 hover:scale-110 shadow-md shadow-background/50 h-8 w-8 text-background font-extrabold p-1" variant="default" size="icon"><UserPlus2Icon className="" /></Button>
+                                    <Button onClick={followArtist} className="max-md:mt-0 max-sm:h-6 max-sm:ml-2 max-sm:w-6 mt-2 ml-5 border-2 border-background/25 hover:scale-110 shadow-md shadow-background/50 h-8 w-8 text-background font-extrabold p-1" variant="default" size="icon">{following ? <UserMinus2Icon />  : <UserPlus2Icon/>} </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Follow artist</p>
+                                    <p>{following ? "Unfollow artist" : "Follow artist" }</p>
                                 </TooltipContent>
                             </Tooltip>
-                        </TooltipProvider>
+                        </TooltipProvider>}
                     </div>
                     <div className="flex max-md:mt-10 max-md:shadow-none shadow-md px-10  max-md:text-foreground justify-evenly max-sm:gap-7  gap-10 py-2">
                         <div><span className="font-semibold">{artistData?.followers.length}</span><p> followers</p></div>
@@ -76,10 +106,10 @@ const ProfileSection = ({ artistData }: ProfileSectionProps) => {
                         <div><span className="font-semibold">{artistData?.posts.length}</span><p> Posts</p></div>
                         <div><span className="font-semibold">{artistData?.works?.length}</span><p> works</p></div>
                     </div>
-                    <div className="flex gap-5">
+                    {artistData?._id !== profile?._id && <div className="flex gap-5">
                         <PricingModal />
-                        <Button variant="secondary"><ShoppingBasket className="h-4 w-4 mr-2" /> Order work</Button>
-                    </div>
+                        <Link href={`/shop/order/${artistData?._id}`}><Button variant="secondary"><ShoppingBasket className="h-4 w-4 mr-2" /> Order work</Button></Link>
+                    </div>}
                 </div>
                 <div className="w-[40%] max-md:w-full max-md:justify-center  max-md:h-40 flex justify-start max-lg:justify-center items-center h-[250px]">
                     {artistData?.imageUrl && <Image className="shadow-md bg-secondary shadow-black rounded-full h-36 w-36 object-cover" alt="prifleImg" width={200} height={200}

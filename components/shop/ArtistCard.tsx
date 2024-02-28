@@ -13,71 +13,55 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { Separator } from "../ui/separator"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import Link from "next/link"
+import { ProfileSectionProps } from "../profilePage/ProfileSection"
 
-interface Artwork {
-    artist: string
-    art: string
-}
 
-const works: Artwork[] = [
-    {
-        artist: "Ornella Binni",
-        art: "https://images.unsplash.com/photo-1465869185982-5a1a7522cbcb?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-        artist: "Tom Byrom",
-        art: "https://images.unsplash.com/photo-1548516173-3cabfa4607e9?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-        artist: "Vladimir Malyavko",
-        art: "https://images.unsplash.com/photo-1494337480532-3725c85fd2ab?auto=format&fit=crop&w=300&q=80",
-    },
-    {
-        artist: "Vladimir Malyavko",
-        art: "https://images.unsplash.com/photo-1494337480532-3725c85fd2ab?auto=format&fit=crop&w=300&q=80",
-    },
-]
 
-export function ArtistCard() {
+export function ArtistCard({ artistData }: { artistData: ProfileSectionProps }) {
     return (
         <Card className="w-fit max-w-[300px] bg-[#eeeeee] dark:bg-[#141414] dark:border-gray-800">
             <CardHeader className="p-0">
                 <div className="flex items-center gap-2 ml-5 my-3">
                     <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" alt="Profile" />
+                        <AvatarImage src={artistData.imageUrl} alt="Profile" />
                         <AvatarFallback>Profile pic</AvatarFallback>
                     </Avatar>
-                    <CardTitle>Sachin k</CardTitle>
+                    <CardTitle>{artistData.name}</CardTitle>
                 </div>
                 <div className="flex shadow-lg justify-evenly py-2 bg-secondary">
-                    <div><span className="font-semibold">12k</span><p> followers</p></div>
-                    <div><span className="font-semibold">18</span><p> Posts</p></div>
-                    <div><span className="font-semibold">28</span><p> works</p></div>
+                    <div><span className="font-semibold">{artistData.followers.length}</span><p> followers</p></div>
+                    <div><span className="font-semibold">{artistData.posts.length}</span><p> Posts</p></div>
+                    <div><span className="font-semibold">{artistData.works?.length}</span><p> works</p></div>
                 </div>
             </CardHeader>
-            <CardContent>
+            <CardContent className="h-[150px]">
                 <ScrollArea className="whitespace-nowrap mt-5 w-[260px] rounded-md border-none">
-                    <div className="flex w-max space-x-4 py-4">
-                        {works.map((artwork: { artist: string, art: string }) => (
-                            <figure key={artwork.artist} className="shrink-0">
+                    <div className="flex w-full space-x-4 py-4">
+                        {artistData.posts.map((post:any) => (
+                            !post.isVideo && <figure key={post._id} className="shrink-0">
                                 <div className="overflow-hidden rounded-md">
                                     <Image
-                                        src={artwork.art}
-                                        alt={`Photo by ${artwork.artist}`}
+                                        src={post.postUrl}
+                                        alt={`Photo by ${artistData.name}`}
                                         className="aspect-[1] rounded-lg h-[100px] w-[100px] object-cover"
                                         width={130} height={130}
                                     />
                                 </div>
                             </figure>
-                        ))}
+                        ))}{
+                            artistData.posts.length === 0 && (
+                                <h1 className="text-center w-full text-2xl font-bold text-secondary">No Posts Yet</h1>
+                            )
+                        }
                     </div>
                     <ScrollBar orientation="horizontal" />
                 </ScrollArea>
             </CardContent>
             <Separator />
             <CardFooter className="flex justify-between mt-5">
-                <Button variant="outline">Profile</Button>
-                <Button>Order</Button>
+                <Link href={`artist/profile/${artistData._id}`}> <Button variant="outline">Profile</Button></Link>
+                <Link href={`shop/order/${artistData._id}`}><Button>Order</Button></Link>
             </CardFooter>
         </Card>
     )

@@ -25,7 +25,7 @@ const ReviewsSection = () => {
                                 </Avatar>
                                 <h2 className='text-xl font-bold'>Sachin k </h2>
                             </div>
-                            <p className='text-lg ml-14'>this is an awesome artist got the work on time, the work was more beautiful than ive expected, the package was really protected and iam happy with the work he provides</p>
+                            <p className='text-lg ml-14'>this is an awesome artist got the work on time, the work was more beautiful than i've expected, the package was really protected and iam happy with the work he provides</p>
                         </TableCell>
                         <TableCell className='flex bg-secondary rounded-lg mt-2 flex-col'>
                             <div className='flex items-center  gap-3'>
